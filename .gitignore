@@ -1,0 +1,6 @@
+TestResults/
+satisfactory_tests/bin/
+satisfactory_tests/obj/
+satisfactory/bin/
+satisfactory/obj/
+.vs/
