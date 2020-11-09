@@ -2,9 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace satisfactory.src
+namespace Satisfactory
 {
-    class Item
+    public class Item
     {
+        public ItemType type;
+        public int quantity;
+
+        public Item(ItemType type, int quantity)
+        {
+            this.type = type;
+            this.quantity = quantity;
+        }
     }
 }

@@ -8,28 +8,32 @@ namespace Satisfactory
     public abstract class Calculator
     {
 
-        public ConstructionTree adjustComponentTreeToWantedProduction(ConstructionTree component, int wantedProductionPerMinute)
+        public ConstructionTree adjustComponentTreeToWantedProduction(ConstructionTree tree, double wantedProductionPerMinute)
         {
             //TO DO clean
-            component.wantedProductionPerMinute = wantedProductionPerMinute;
+            tree.root.wantedProductionPerMinute = wantedProductionPerMinute;
 
-            double machinesCount = (double) component.wantedProductionPerMinute / (double) component.info.baseProductionPerMinute;
+            double machinesCount = (double)tree.root.wantedProductionPerMinute / (double)tree.root.getBaseProductionPerMinute();
             double newClockSpeedSum = machinesCount * 100.0;
             int newMachinesCount = (int) Math.Ceiling(machinesCount);
 
 
-            for (var i = component.buildingDevices.Count; i < newMachinesCount; i++)
-                component.addMachine();
+            for (var i = tree.root.buildingDevices.Count; i < newMachinesCount; i++)
+                tree.root.addMachine();
 
-            component.updateMachinesClockSpeedAndAlignPowerUsage(newClockSpeedSum / newMachinesCount);
+            tree.root.updateBuildingDevicesClockSpeedAndAlignPowerUsage(newClockSpeedSum / newMachinesCount);
 
-            foreach (var ingredient in component.ingredients)
-                adjustComponentTreeToWantedProduction(ingredient, component.wantedProductionPerMinute * ingredient.quantity);
+            foreach (var ingredient in tree.ingredients)
+            {
+                var productionForIngredientToBeAligned = tree.root.wantedProductionPerMinute * tree.root.getIngredientQuantity(ingredient.root.getItemType());
+                adjustComponentTreeToWantedProduction(ingredient, productionForIngredientToBeAligned);
+            }
+                
 
-            return adjustComponentTreeToAdditionalCondition(component);
+            return adjustComponentTreeToAdditionalCondition(tree);
         }
 
-        public abstract ConstructionTree adjustComponentTreeToAdditionalCondition(ConstructionTree component);
+        public abstract ConstructionTree adjustComponentTreeToAdditionalCondition(ConstructionTree tree);
 
     }
 }

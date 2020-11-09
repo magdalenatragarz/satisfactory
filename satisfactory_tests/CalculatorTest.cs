@@ -9,56 +9,55 @@ namespace SatisfactoryTests
         [TestMethod]
         public void realModularFrame()
         {
-            var ironOreForIronInglotForIronPlate = new ConstructionTree(Database.ironOreInfo);
-            var ironInglotForIronPlate = new ConstructionTree(Database.ironInglotInfo);
-            ironInglotForIronPlate.addIngredient(ironOreForIronInglotForIronPlate, 1);
 
-            var ironPlateForReinforcedIronPlate = new ConstructionTree(Database.ironPlateInfo);
-            ironPlateForReinforcedIronPlate.addIngredient(ironInglotForIronPlate, 3);
+            var ironOreForIronInglotForIronPlateTree = new ConstructionTree(Database.get(ItemType.ironOre));
+            var ironOreForIronInglotForIronRodForScrewTree = new ConstructionTree(Database.get(ItemType.ironOre));
+            var ironOreForIronInglotForIronRodForModularFrameTree = new ConstructionTree(Database.get(ItemType.ironOre));
 
-            var ironOreForIronInglotForScrew = new ConstructionTree(Database.ironOreInfo);
-            var ironInglotForIronRodForScrew = new ConstructionTree(Database.ironInglotInfo);
-            ironInglotForIronRodForScrew.addIngredient(ironOreForIronInglotForScrew, 1);
+            var ironInglotForIronPlateTree = new ConstructionTree(Database.get(ItemType.ironInglot));
+            var ironInglotForIronRodForScrewTree = new ConstructionTree(Database.get(ItemType.ironInglot));
+            var ironInglotForIronRodForModularFrameTree = new ConstructionTree(Database.get(ItemType.ironInglot));
 
-            var ironRodForScrew = new ConstructionTree(Database.ironRodInfo);
-            ironRodForScrew.addIngredient(ironInglotForIronRodForScrew, 1);
+            var ironPlateForReinforcedIronPlateTree = new ConstructionTree(Database.get(ItemType.ironPlate));
+            var ironRodForScrewTree = new ConstructionTree(Database.get(ItemType.ironRod));
+            var ironRodForModularFrameTree = new ConstructionTree(Database.get(ItemType.ironRod));
+            var screwForReinforcedIronPlateTree = new ConstructionTree(Database.get(ItemType.screw));
 
-            var screwForReinforcedIronPlate = new ConstructionTree(Database.screwInfo);
-            screwForReinforcedIronPlate.addIngredient(ironRodForScrew, 1);
+            var modularFrameTree = new ConstructionTree(Database.get(ItemType.modularFrame));
+            var reinforcedIronPlateForModularFrameTree = new ConstructionTree(Database.get(ItemType.reinforcedIronPlate));
 
-            var reinforcedIronPlateForModularFrame = new ConstructionTree(Database.reinforcedIronPlateInfo);
-            reinforcedIronPlateForModularFrame.addIngredient(ironPlateForReinforcedIronPlate, 6);
-            reinforcedIronPlateForModularFrame.addIngredient(screwForReinforcedIronPlate, 12);
+            ironInglotForIronPlateTree.addIngredient(ironOreForIronInglotForIronPlateTree);
+            ironPlateForReinforcedIronPlateTree.addIngredient(ironInglotForIronPlateTree);
+            reinforcedIronPlateForModularFrameTree.addIngredient(ironPlateForReinforcedIronPlateTree);
+            modularFrameTree.addIngredient(reinforcedIronPlateForModularFrameTree);
 
-            var ironOreForIronRod = new ConstructionTree(Database.ironOreInfo);
-            var ironInglotForIronRod = new ConstructionTree(Database.ironInglotInfo);
-            ironInglotForIronRod.addIngredient(ironOreForIronRod, 1);
+            ironInglotForIronRodForScrewTree.addIngredient(ironOreForIronInglotForIronRodForScrewTree);
+            ironRodForScrewTree.addIngredient(ironInglotForIronRodForScrewTree);
+            screwForReinforcedIronPlateTree.addIngredient(ironRodForScrewTree);
+            reinforcedIronPlateForModularFrameTree.addIngredient(screwForReinforcedIronPlateTree);
 
-            var ironRodForModularFrame = new ConstructionTree(Database.ironRodInfo);
-            ironRodForModularFrame.addIngredient(ironInglotForIronRod, 12);
-
-            var modularFrame = new ConstructionTree(Database.modularFrameInfo);
-            modularFrame.addIngredient(reinforcedIronPlateForModularFrame, 3);
-            modularFrame.addIngredient(ironRodForModularFrame, 12);
+            ironInglotForIronRodForModularFrameTree.addIngredient(ironOreForIronInglotForIronRodForModularFrameTree);
+            ironRodForModularFrameTree.addIngredient(ironInglotForIronRodForModularFrameTree);
+            modularFrameTree.addIngredient(ironRodForModularFrameTree);
 
             var wantedProductionPerMinute = 2;
             var basicCalculator = new BasicCalculator();
-            basicCalculator.adjustComponentTreeToWantedProduction(modularFrame, wantedProductionPerMinute);
+            basicCalculator.adjustComponentTreeToWantedProduction(modularFrameTree, wantedProductionPerMinute);
 
-            Assert.AreEqual(reinforcedIronPlateForModularFrame.buildingDevices.Count, 2);
-            Assert.AreEqual(reinforcedIronPlateForModularFrame.buildingDevices[0].getClockSpeed(), 60.0);
+            Assert.AreEqual(reinforcedIronPlateForModularFrameTree.root.buildingDevices.Count, 2);
+            Assert.AreEqual(reinforcedIronPlateForModularFrameTree.root.buildingDevices[0].getClockSpeed(), 60.0);
 
-            Assert.AreEqual(ironRodForModularFrame.buildingDevices.Count, 2);
-            Assert.AreEqual(ironRodForModularFrame.buildingDevices[0].getClockSpeed(), 80.0);
+            Assert.AreEqual(ironRodForModularFrameTree.root.buildingDevices.Count, 2);
+            Assert.AreEqual(ironRodForModularFrameTree.root.buildingDevices[0].getClockSpeed(), 80.0);
 
-            Assert.AreEqual(ironInglotForIronPlate.buildingDevices.Count, 4);
-            Assert.AreEqual(ironInglotForIronPlate.buildingDevices[0].getClockSpeed(), 90.0);
+            Assert.AreEqual(ironInglotForIronPlateTree.root.buildingDevices.Count, 4);
+            Assert.AreEqual(ironInglotForIronPlateTree.root.buildingDevices[0].getClockSpeed(), 90.0);
 
-            Assert.AreEqual(screwForReinforcedIronPlate.buildingDevices.Count, 2);
-            Assert.AreEqual(screwForReinforcedIronPlate.buildingDevices[0].getClockSpeed(), 90.0);
+            Assert.AreEqual(screwForReinforcedIronPlateTree.root.buildingDevices.Count, 2);
+            Assert.AreEqual(screwForReinforcedIronPlateTree.root.buildingDevices[0].getClockSpeed(), 90.0);
 
-            Assert.AreEqual(ironOreForIronInglotForScrew.buildingDevices.Count, 3);
-            Assert.AreEqual(ironOreForIronInglotForScrew.buildingDevices[0].getClockSpeed(), 80.0);
+            Assert.AreEqual(ironOreForIronInglotForIronRodForScrewTree.root.buildingDevices.Count, 3);
+            Assert.AreEqual(ironOreForIronInglotForIronRodForScrewTree.root.buildingDevices[0].getClockSpeed(), 80.0);
 
         }
 

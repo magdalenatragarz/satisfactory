@@ -4,12 +4,14 @@ namespace Satisfactory
 {
 	public class Machine
 	{
+		private MachineType type;
 		private double powerUsageAfterModifications;
 		private double clockSpeedAfterModifications;
 
-		public Machine(MachineInfo info)
+		public Machine(MachineType type)
 		{
-			this.powerUsageAfterModifications = info.basePowerUsage;
+			this.type = type;
+			this.powerUsageAfterModifications = Database.getBasePowerUsage(type);
 			this.clockSpeedAfterModifications = 100.0;
 		}
 
