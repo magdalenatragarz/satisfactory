@@ -25,7 +25,10 @@ namespace Satisfactory
 
             foreach (var ingredient in tree.ingredients)
             {
-                var productionForIngredientToBeAligned = tree.root.wantedProductionPerMinute * tree.root.getIngredientQuantity(ingredient.root.getItemType());
+                var ingredientQuantity = tree.root.getIngredientQuantity(ingredient.root.getItemType());
+                var ingredientBaseProduction = wantedProductionPerMinute;
+                var produced = tree.root.getProducedProduct();
+                var productionForIngredientToBeAligned = ingredientQuantity * ingredientBaseProduction / produced;
                 adjustComponentTreeToWantedProduction(ingredient, productionForIngredientToBeAligned);
             }
                 

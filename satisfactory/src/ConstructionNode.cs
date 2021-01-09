@@ -27,10 +27,9 @@ namespace Satisfactory
                 buildingDevice.updateClockSpeedAndAlignPowerUsage(clockSpeed);
 
         }
-
         public ItemType getItemType()
         {
-            return recipe.getProducedItem();
+            return recipe.getProducedItemType();
         }
 
         public int getIngredientQuantity(ItemType type)
@@ -38,11 +37,31 @@ namespace Satisfactory
             return recipe.getIngredientQuantity(type);
         }
 
+        public int getProducedProduct()
+        {
+            return recipe.product.quantity;
+        }
 
+        public double getTotalPowerUsage()
+        {
+            var powerUsage = 0.0;
+
+            foreach (var machine in buildingDevices)
+                powerUsage = powerUsage + machine.getPowerUsage();
+
+            return powerUsage;
+        }
 
         public double getBaseProductionPerMinute()
         {
             return recipe.getProductionPerMinute();
         }
+
+        public string toString()
+        {
+            return "To build " + recipe.getProducedItemType() + ", machines (" + recipe.buildingDeviceType + ") used: " + buildingDevices.Count
+                + ", clockSpeed set to " + buildingDevices[0].getClockSpeed() + ", " + "wanted production per minute " + wantedProductionPerMinute + "\n";
+        }
+
     }
 }

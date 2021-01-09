@@ -7,14 +7,22 @@ namespace Satisfactory
     public class Recipe
     {
         public MachineType buildingDeviceType;
-        private Item output;
-        private List<Item> input;
+        public Item product;
+        public List<Item> input;
         private int timeInSeconds;
 
         public Recipe(Item output, List<Item> input, int timeInSeconds, MachineType buildingDeviceType)
         {
-            this.output = output;
+            this.product = output;
             this.input = input;
+            this.timeInSeconds = timeInSeconds;
+            this.buildingDeviceType = buildingDeviceType;
+        }
+
+        public Recipe(Item output, int timeInSeconds, MachineType buildingDeviceType)
+        {
+            this.product = output;
+            this.input = new List<Item>();
             this.timeInSeconds = timeInSeconds;
             this.buildingDeviceType = buildingDeviceType;
         }
@@ -29,14 +37,31 @@ namespace Satisfactory
             throw new NotImplementedException();
         }
 
-        public ItemType getProducedItem()
+        public ItemType getProducedItemType()
         {
-            return output.type;
+            return product.type;
         }
 
         public double getProductionPerMinute()
         {
-            return (output.quantity * 60) / timeInSeconds;
+            return (product.quantity * 60) / timeInSeconds;
+        }
+
+        public string toString()
+        {
+            var str = "Product: " + product.quantity + " x " + product.type + "\n";
+               
+            if (input.Count != 0)
+                str = str + "Ingredients: ";
+
+            foreach (var ingridient in input)
+                str = str + ingridient.quantity + " x " + ingridient.type + ", ";
+
+            str = str + "\nDevice: " + buildingDeviceType;
+            str = str + "\nProduction per minute: " + getProductionPerMinute() + "\n";
+
+            return str;
+
         }
     }
 }

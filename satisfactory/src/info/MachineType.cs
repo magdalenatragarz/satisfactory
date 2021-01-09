@@ -6,10 +6,17 @@ namespace Satisfactory
 {
     public enum MachineType
     {
-        assembler,
-        constructor,
+        assemblerMK1,
+        manufacturerMK1,
+        constructorMK1,
         refinery,
         minerMK1,
-        smelter
+        minerMK2,
+        minerMK3,
+        foundryMK1,
+        smelterMK1,
+        packager,
+        oilPump,
+        waterPump,
     }
 }

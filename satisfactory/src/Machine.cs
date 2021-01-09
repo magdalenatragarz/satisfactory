@@ -26,9 +26,14 @@ namespace Satisfactory
 			return clockSpeedAfterModifications;
 		}
 
+		public double getPowerUsage()
+		{
+			return powerUsageAfterModifications;
+		}
+
 		private void alignPowerUsage(double clockSpeed)
 		{
-
+			powerUsageAfterModifications = Database.getBasePowerUsage(type) * Math.Pow((clockSpeed / 100), 1.6);
 		}
 
 	}
